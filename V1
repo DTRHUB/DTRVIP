@@ -1,0 +1,1041 @@
+-- 📦 Services
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- 🎨 Couleur DTR rose
+local dtrRose = Color3.fromRGB(249, 89, 89)
+
+-- 🪟 ScreenGui
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "DTR_VIP_GUI"
+Gui.ResetOnSpawn = false
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Gui.Parent = player:WaitForChild("PlayerGui")
+
+-- 🖥️ Frame Principale
+local FramePrincipale = Instance.new("Frame", Gui)
+FramePrincipale.Name = "FramePrincipale"
+FramePrincipale.Size = UDim2.new(0, 608, 0, 582)
+FramePrincipale.Position = UDim2.new(0.263, 0, 0.153, 0)
+FramePrincipale.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
+FramePrincipale.BorderSizePixel = 0
+Instance.new("UIStroke", FramePrincipale).Color = dtrRose
+
+
+
+local FrameTitle = Instance.new("Frame", FramePrincipale)
+FrameTitle.Name = "FrameTitle"
+FrameTitle.Size = UDim2.new(0, 608, 0, 35)
+FrameTitle.Position = UDim2.new(0, 0, 0, 0)
+FrameTitle.BackgroundTransparency = 1
+Instance.new("UIStroke", FrameTitle).Color = dtrRose
+
+local Title = Instance.new("TextLabel", FrameTitle)
+Title.Size = UDim2.new(0, 200, 0, 35)
+Title.Position = UDim2.new(0.33, 0, 0, 0)
+Title.Text = "DTR VIP"
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 16
+Title.TextColor3 = dtrRose
+Title.BackgroundTransparency = 1
+Title.TextWrapped = true
+
+
+
+
+local tabs = {}
+local frames = {}
+
+local tabNames = {"combat", "config", "visuals", "exploit"}
+local tabSpacing = 120
+local startX = 34
+
+for i, name in ipairs(tabNames) do
+    local tabButton = Instance.new("TextButton", FramePrincipale)
+    tabButton.Name = name .. "_Tab"
+    tabButton.Text = name
+    tabButton.Size = UDim2.new(0, 110, 0, 33)
+    tabButton.Position = UDim2.new(0, startX + ((i - 1) * tabSpacing), 0, 38)
+    tabButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    tabButton.BorderSizePixel = 0
+    tabButton.Font = Enum.Font.SourceSans
+    tabButton.TextSize = 16
+    tabButton.TextColor3 = Color3.fromRGB(167, 167, 167)
+    tabs[name] = tabButton
+
+    local frame = Instance.new("Frame", FramePrincipale)
+    frame.Name = name .. "_Frame"
+    frame.Size = UDim2.new(0, 580, 0, 469)
+    frame.Position = UDim2.new(0, 14, 0, 83)
+    frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    frame.BorderSizePixel = 0
+    frame.Visible = name == "combat"
+    Instance.new("UIStroke", frame).Color = dtrRose
+    frames[name] = frame
+end
+
+local function switchTab(tabName)
+    for name, frame in pairs(frames) do
+        frame.Visible = name == tabName
+        tabs[name].TextColor3 = name == tabName and dtrRose or Color3.fromRGB(167, 167, 167)
+    end
+end
+
+for name, btn in pairs(tabs) do
+    btn.MouseButton1Click:Connect(function()
+        switchTab(name)
+    end)
+end
+
+switchTab("combat") -- Onglet par défaut
+
+
+
+local combatFrame = frames["combat"]
+local toggleColorOff = Color3.fromRGB(89, 89, 89)
+local toggleColorOn = Color3.fromRGB(249, 89, 89)
+
+
+
+
+local function createCombatToggle(name, labelText, yPos)
+    local toggle = Instance.new("TextButton", combatFrame)
+    toggle.Name = "toggle_" .. name
+    toggle.Size = UDim2.new(0, 21, 0, 20)
+    toggle.Position = UDim2.new(0.08, 0, yPos, 0)
+    toggle.BackgroundColor3 = toggleColorOff
+    toggle.BorderSizePixel = 0
+    toggle.Text = ""
+    toggle.Font = Enum.Font.SourceSans
+    toggle.TextSize = 14
+    toggle.TextColor3 = toggleColorOff
+    toggle.Active = false
+
+    local label = Instance.new("TextLabel", combatFrame)
+    label.Name = "label_" .. name
+    label.Size = UDim2.new(0, 170, 0, 27)
+    label.Position = UDim2.new(0.13, 0, yPos - 0.01, 0)
+    label.Text = labelText
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 17
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    toggle.MouseButton1Click:Connect(function()
+        toggle.Active = not toggle.Active
+        toggle.BackgroundColor3 = toggle.Active and toggleColorOn or toggleColorOff
+    end)
+end
+
+
+
+createCombatToggle("Aimbot", "Enable Aimbot", 0.10)
+createCombatToggle("WallCheck", "Wall Check", 0.17)
+createCombatToggle("NoRecoil", "No Recoil", 0.24)
+createCombatToggle("PerfectNoSpread", "Perfect NoSpread", 0.31)
+createCombatToggle("AutomaticFire", "Automatic Fire", 0.38)
+createCombatToggle("SilentAimbot", "Silent Aimbot", 0.45)
+createCombatToggle("Prediction", "Prediction", 0.52)
+createCombatToggle("DrawFOVRadius", "Draw FOV Radius", 0.59)
+createCombatToggle("TriggerBot", "Trigger Bot", 0.66)
+createCombatToggle("TriggerBotWallCheck", "Trigger Bot Wall Check", 0.73)
+createCombatToggle("RecoilCrosshair", "Recoil Crosshair", 0.80)
+
+
+
+local sliderData = {
+    {id = "AimSmooth", label = "Aim Smooth", default = 1.00, min = 0.1, max = 5.0, y = 0.10},
+    {id = "AimFOV", label = "Aim FOV", default = 2500.00, min = 100, max = 4000, y = 0.20},
+    {id = "TriggerFOV", label = "Trigger FOV", default = 5.00, min = 1, max = 20, y = 0.30},
+}
+
+local UIS = game:GetService("UserInputService")
+
+for _, s in ipairs(sliderData) do
+    local label = Instance.new("TextLabel", combatFrame)
+    label.Name = s.id .. "_Label"
+    label.Size = UDim2.new(0, 100, 0, 27)
+    label.Position = UDim2.new(0.55, 0, s.y, 0)
+    label.Text = s.label
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 17
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local bg = Instance.new("Frame", combatFrame)
+    bg.Name = s.id .. "_SliderBG"
+    bg.Size = UDim2.new(0, 200, 0, 12)
+    bg.Position = UDim2.new(0.55, 0, s.y + 0.055, 0)
+    bg.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+    bg.BorderSizePixel = 0
+
+    local fill = Instance.new("Frame", bg)
+    fill.Name = "Fill"
+    fill.Size = UDim2.new((s.default - s.min)/(s.max - s.min), 0, 1, 0)
+    fill.BackgroundColor3 = toggleColorOn
+    fill.BorderSizePixel = 0
+
+    local valueLabel = Instance.new("TextLabel", combatFrame)
+    valueLabel.Name = s.id .. "_Value"
+    valueLabel.Size = UDim2.new(0, 80, 0, 27)
+    valueLabel.Position = UDim2.new(0.75, 0, s.y + 0.045, 0)
+    valueLabel.Text = tostring(s.default)
+    valueLabel.Font = Enum.Font.SourceSansBold
+    valueLabel.TextSize = 15
+    valueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    valueLabel.BackgroundTransparency = 1
+
+    local dragging = false
+
+    bg.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+    end)
+
+    bg.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local rel = input.Position.X - bg.AbsolutePosition.X
+            local pct = math.clamp(rel / bg.AbsoluteSize.X, 0, 1)
+            local val = math.floor((pct * (s.max - s.min) + s.min) * 100) / 100
+            fill.Size = UDim2.new(pct, 0, 1, 0)
+            valueLabel.Text = tostring(val)
+        end
+    end)
+end
+
+
+
+local configFrame = frames["config"]
+
+local configNameBox = Instance.new("TextBox", configFrame)
+configNameBox.Name = "ConfigNameBox"
+configNameBox.Size = UDim2.new(0, 300, 0, 30)
+configNameBox.Position = UDim2.new(0.05, 0, 0.07, 0)
+configNameBox.PlaceholderText = "Name of the config"
+configNameBox.Text = ""
+configNameBox.ClearTextOnFocus = false
+configNameBox.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+configNameBox.TextColor3 = Color3.new(1, 1, 1)
+configNameBox.Font = Enum.Font.SourceSans
+configNameBox.TextSize = 16
+configNameBox.BorderSizePixel = 0
+configNameBox.TextXAlignment = Enum.TextXAlignment.Left
+
+
+
+local savedConfigs = {"Sniper", "FastAim", "ESPBoost"} -- Exemple
+
+local configDropdown = Instance.new("ScrollingFrame", configFrame)
+configDropdown.Name = "ConfigDropdown"
+configDropdown.Size = UDim2.new(0, 300, 0, 100)
+configDropdown.Position = UDim2.new(0.05, 0, 0.15, 0)
+configDropdown.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+configDropdown.ScrollBarThickness = 6
+configDropdown.BorderSizePixel = 0
+configDropdown.CanvasSize = UDim2.new(0, 0, 0, #savedConfigs * 26)
+
+for i, name in ipairs(savedConfigs) do
+    local item = Instance.new("TextButton", configDropdown)
+    item.Text = name
+    item.Size = UDim2.new(1, -6, 0, 24)
+    item.Position = UDim2.new(0, 3, 0, (i - 1) * 26)
+    item.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    item.TextColor3 = Color3.fromRGB(255, 255, 255)
+    item.Font = Enum.Font.SourceSans
+    item.TextSize = 15
+    item.BorderSizePixel = 0
+    item.TextXAlignment = Enum.TextXAlignment.Left
+end
+
+
+local createBtn = Instance.new("TextButton", configFrame)
+createBtn.Name = "CreateConfigBtn"
+createBtn.Text = "Create Config"
+createBtn.Size = UDim2.new(0, 300, 0, 30)
+createBtn.Position = UDim2.new(0.05, 0, 0.28, 0)
+createBtn.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+createBtn.TextColor3 = Color3.fromRGB(249, 89, 89)
+createBtn.Font = Enum.Font.SourceSans
+createBtn.TextSize = 16
+createBtn.BorderSizePixel = 0
+createBtn.TextXAlignment = Enum.TextXAlignment.Left
+
+
+
+local configActions = {
+    {name = "Load Config", y = 0.43},
+    {name = "Save Config", y = 0.50},
+    {name = "Delete Config", y = 0.57},
+    {name = "AutoLoad Config", y = 0.64},
+    {name = "Unload Menu", y = 0.71},
+}
+
+for _, data in ipairs(configActions) do
+    local btn = Instance.new("TextButton", configFrame)
+    btn.Name = data.name:gsub(" ", "") .. "_Btn"
+    btn.Text = data.name
+    btn.Size = UDim2.new(0, 300, 0, 33)
+    btn.Position = UDim2.new(0.05, 0, data.y, 0)
+    btn.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    btn.TextColor3 = Color3.fromRGB(167, 167, 167)
+    btn.Font = Enum.Font.SourceSans
+    btn.TextSize = 16
+    btn.BorderSizePixel = 0
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+end
+
+
+local visualsFrame = frames["visuals"]
+local toggleColorOff = Color3.fromRGB(89, 89, 89)
+local toggleColorOn = Color3.fromRGB(249, 89, 89)
+
+local function createVisualToggle(name, labelText, yPos, side)
+    local toggle = Instance.new("TextButton", visualsFrame)
+    toggle.Name = "toggle_" .. name
+    toggle.Size = UDim2.new(0, 21, 0, 20)
+    toggle.Position = side == "left"
+        and UDim2.new(0.08, 0, yPos, 0)
+        or UDim2.new(0.55, 0, yPos, 0)
+    toggle.BackgroundColor3 = toggleColorOff
+    toggle.BorderSizePixel = 0
+    toggle.Text = ""
+    toggle.Font = Enum.Font.SourceSans
+    toggle.TextSize = 14
+    toggle.TextColor3 = toggleColorOff
+    toggle.Active = false
+
+    local label = Instance.new("TextLabel", visualsFrame)
+    label.Name = "label_" .. name
+    label.Size = UDim2.new(0, 180, 0, 27)
+    label.Position = side == "left"
+        and UDim2.new(0.13, 0, yPos - 0.01, 0)
+        or UDim2.new(0.6, 0, yPos - 0.01, 0)
+    label.Text = labelText
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 17
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    toggle.MouseButton1Click:Connect(function()
+        toggle.Active = not toggle.Active
+        toggle.BackgroundColor3 = toggle.Active and toggleColorOn or toggleColorOff
+    end)
+end
+
+
+createVisualToggle("Box3D", "3D Box", 0.10, "left")
+createVisualToggle("Box2D", "2D Box", 0.17, "left")
+createVisualToggle("Bones", "Bones", 0.24, "left")
+createVisualToggle("HealthBar", "Health Bar", 0.31, "left")
+createVisualToggle("Distance", "Distance", 0.38, "left")
+createVisualToggle("PlayerName", "Player Name", 0.45, "left")
+createVisualToggle("Radar", "Radar", 0.52, "left")
+
+
+
+createVisualToggle("VisibleChams", "Visible Chams", 0.10, "right")
+createVisualToggle("NotVisibleChams", "Not Visible Chams", 0.17, "right")
+createVisualToggle("RainbowChams", "Rainbow Chams", 0.24, "right")
+createVisualToggle("EnemyChams", "Enemy Chams", 0.31, "right")
+createVisualToggle("HandChams", "Hand Chams", 0.38, "right")
+
+
+
+local rgbSpeed = 1.50
+local UIS = game:GetService("UserInputService")
+
+local rgbLabel = Instance.new("TextLabel", visualsFrame)
+rgbLabel.Text = "RGB Speed"
+rgbLabel.Size = UDim2.new(0, 140, 0, 27)
+rgbLabel.Position = UDim2.new(0.08, 0, 0.70, 0)
+rgbLabel.Font = Enum.Font.SourceSansBold
+rgbLabel.TextSize = 17
+rgbLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+rgbLabel.BackgroundTransparency = 1
+rgbLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local valueLabel = Instance.new("TextLabel", visualsFrame)
+valueLabel.Text = tostring(rgbSpeed)
+valueLabel.Size = UDim2.new(0, 80, 0, 27)
+valueLabel.Position = UDim2.new(0.75, 0, 0.71, 0)
+valueLabel.Font = Enum.Font.SourceSansBold
+valueLabel.TextSize = 15
+valueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+valueLabel.BackgroundTransparency = 1
+
+local sliderBG = Instance.new("Frame", visualsFrame)
+sliderBG.Size = UDim2.new(0, 220, 0, 12)
+sliderBG.Position = UDim2.new(0.30, 0, 0.72, 0)
+sliderBG.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+sliderBG.BorderSizePixel = 0
+
+local fill = Instance.new("Frame", sliderBG)
+fill.Size = UDim2.new((rgbSpeed - 1) / 2, 0, 1, 0)
+fill.BackgroundColor3 = toggleColorOn
+fill.BorderSizePixel = 0
+
+-- 🔁 Drag logic
+local dragging = false
+
+sliderBG.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+end)
+
+sliderBG.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local rel = input.Position.X - sliderBG.AbsolutePosition.X
+        local pct = math.clamp(rel / sliderBG.AbsoluteSize.X, 0, 1)
+        local val = math.floor((pct * 2 + 1) * 100) / 100
+        rgbSpeed = val
+        valueLabel.Text = tostring(val)
+        fill.Size = UDim2.new(pct, 0, 1, 0)
+    end
+end)
+
+
+local exploitFrame = frames["exploit"]
+local toggleColorOff = Color3.fromRGB(89, 89, 89)
+local toggleColorOn = Color3.fromRGB(249, 89, 89)
+
+local function createExploitToggle(name, labelText, yPos, side, forceColor)
+    local toggle = Instance.new("TextButton", exploitFrame)
+    toggle.Name = "toggle_" .. name
+    toggle.Size = UDim2.new(0, 21, 0, 20)
+    toggle.Position = side == "left" and UDim2.new(0.08, 0, yPos, 0) or UDim2.new(0.55, 0, yPos, 0)
+    toggle.BackgroundColor3 = toggleColorOff
+    toggle.BorderSizePixel = 0
+    toggle.Text = ""
+    toggle.Font = Enum.Font.SourceSans
+    toggle.TextSize = 14
+    toggle.TextColor3 = toggleColorOff
+    toggle.Active = false
+
+    local label = Instance.new("TextLabel", exploitFrame)
+    label.Name = "label_" .. name
+    label.Size = UDim2.new(0, 180, 0, 27)
+    label.Position = side == "left"
+        and UDim2.new(0.13, 0, yPos - 0.01, 0)
+        or UDim2.new(0.6, 0, yPos - 0.01, 0)
+    label.Text = labelText
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 17
+    label.TextColor3 = forceColor or Color3.fromRGB(255, 255, 255)
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    toggle.MouseButton1Click:Connect(function()
+        toggle.Active = not toggle.Active
+        toggle.BackgroundColor3 = toggle.Active and toggleColorOn or toggleColorOff
+    end)
+end
+
+
+
+createExploitToggle("NightMode", "Night Mode", 0.10, "left")
+createExploitToggle("BigPlayer", "Big Player", 0.18, "left")
+createExploitToggle("ThirdPerson", "Third Person", 0.26, "left")
+createExploitToggle("SpinBot", "ENABLE SPINBOT", 0.34, "left", toggleColorOn) -- rose vif
+
+
+createExploitToggle("AspectRatio", "Aspect Ratio Changer", 0.10, "right")
+createExploitToggle("Watermark", "Watermark (DTR.WTF)", 0.18, "right")
+createExploitToggle("FreeCam", "Free Cam", 0.26, "right")
+createExploitToggle("FOVChanger", "FOV Changer", 0.34, "right")
+
+
+
+local watermark = Instance.new("TextLabel", Gui)
+watermark.Text = "DTR.WTF"
+watermark.Size = UDim2.new(0, 160, 0, 30)
+watermark.Position = UDim2.new(0, 12, 0, 12)
+watermark.BackgroundTransparency = 1
+watermark.Font = Enum.Font.SourceSansBold
+watermark.TextSize = 18
+
+local h = 0
+game:GetService("RunService").RenderStepped:Connect(function()
+    h = (h + 0.003) % 1
+    watermark.TextColor3 = Color3.fromHSV(h, 1, 1)
+end)
+
+
+local UIS = game:GetService("UserInputService")
+local fovValue = 90
+
+local fovSliderBG = Instance.new("Frame", exploitFrame)
+fovSliderBG.Size = UDim2.new(0, 220, 0, 12)
+fovSliderBG.Position = UDim2.new(0.55, 0, 0.43, 0)
+fovSliderBG.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
+fovSliderBG.BorderSizePixel = 0
+fovSliderBG.Visible = false
+
+local fill = Instance.new("Frame", fovSliderBG)
+fill.Size = UDim2.new((fovValue - 70)/50, 0, 1, 0)
+fill.BackgroundColor3 = toggleColorOn
+fill.BorderSizePixel = 0
+
+local valueLabel = Instance.new("TextLabel", exploitFrame)
+valueLabel.Text = tostring(fovValue)
+valueLabel.Size = UDim2.new(0, 80, 0, 27)
+valueLabel.Position = UDim2.new(0.78, 0, 0.42, 0)
+valueLabel.Font = Enum.Font.SourceSansBold
+valueLabel.TextSize = 15
+valueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+valueLabel.BackgroundTransparency = 1
+valueLabel.Visible = false
+
+-- 🧠 Toggle logique
+local toggleFOV = exploitFrame:FindFirstChild("toggle_FOVChanger")
+if toggleFOV then
+    toggleFOV.MouseButton1Click:Connect(function()
+        toggleFOV.Active = not toggleFOV.Active
+        toggleFOV.BackgroundColor3 = toggleFOV.Active and toggleColorOn or toggleColorOff
+        fovSliderBG.Visible = toggleFOV.Active
+        valueLabel.Visible = toggleFOV.Active
+    end)
+end
+
+-- 🕹️ Drag logic
+local dragging = false
+
+fovSliderBG.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+end)
+
+fovSliderBG.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local rel = input.Position.X - fovSliderBG.AbsolutePosition.X
+        local pct = math.clamp(rel / fovSliderBG.AbsoluteSize.X, 0, 1)
+        local val = math.floor(pct * 50 + 70 + 0.5)
+        fovValue = val
+        valueLabel.Text = tostring(val)
+        fill.Size = UDim2.new(pct, 0, 1, 0)
+    end
+end)
+
+
+local States = {
+    combat = {
+        Aimbot = false,
+        WallCheck = false,
+        NoRecoil = false,
+        PerfectNoSpread = false,
+        AutomaticFire = false,
+        SilentAimbot = false,
+        Prediction = false,
+        DrawFOVRadius = false,
+        TriggerBot = false,
+        TriggerBotWallCheck = false,
+        RecoilCrosshair = false,
+        AimSmooth = 1.00,
+        AimFOV = 2500.00,
+        TriggerFOV = 5.00,
+    },
+    visuals = {
+        Box3D = false,
+        Box2D = false,
+        Bones = false,
+        HealthBar = false,
+        Distance = false,
+        PlayerName = false,
+        Radar = false,
+        VisibleChams = false,
+        NotVisibleChams = false,
+        RainbowChams = false,
+        EnemyChams = false,
+        HandChams = false,
+        RGBSpeed = 1.50,
+    },
+    exploit = {
+        NightMode = false,
+        BigPlayer = false,
+        ThirdPerson = false,
+        SpinBot = false,
+        AspectRatio = false,
+        Watermark = false,
+        FreeCam = false,
+        FOVChanger = false,
+        FOVValue = 90,
+    },
+    config = {
+        selectedConfig = nil,
+        lastCreated = nil,
+    }
+}
+
+
+local function bindToggles(frame, stateTable)
+    for key, val in pairs(stateTable) do
+        if typeof(val) == "boolean" then
+            local toggle = frame:FindFirstChild("toggle_" .. key)
+            if toggle then
+                toggle.MouseButton1Click:Connect(function()
+                    stateTable[key] = not stateTable[key]
+                    toggle.BackgroundColor3 = stateTable[key]
+                        and Color3.fromRGB(249, 89, 89)
+                        or Color3.fromRGB(89, 89, 89)
+                end)
+            end
+        end
+    end
+end
+
+-- 📦 Application
+bindToggles(frames["combat"], States.combat)
+bindToggles(frames["visuals"], States.visuals)
+bindToggles(frames["exploit"], States.exploit)
+
+
+local function bindSlider(frame, id, stateTable, min, max)
+    local bg = frame:FindFirstChild(id .. "_SliderBG")
+    local fill = bg and bg:FindFirstChild("Fill")
+    local label = frame:FindFirstChild(id .. "_Value")
+
+    if bg and fill and label then
+        local dragging = false
+
+        bg.InputBegan:Connect(function(i)
+            if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+        end)
+
+        bg.InputEnded:Connect(function(i)
+            if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+        end)
+
+        game:GetService("UserInputService").InputChanged:Connect(function(input)
+            if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+                local rel = input.Position.X - bg.AbsolutePosition.X
+                local pct = math.clamp(rel / bg.AbsoluteSize.X, 0, 1)
+                local val = math.floor((pct * (max - min) + min) * 100) / 100
+                fill.Size = UDim2.new(pct, 0, 1, 0)
+                label.Text = tostring(val)
+                stateTable[id] = val
+            end
+        end)
+    end
+end
+
+
+-- Combat sliders
+bindSlider(frames["combat"], "AimSmooth", States.combat, 0.1, 5.0)
+bindSlider(frames["combat"], "AimFOV", States.combat, 100, 4000)
+bindSlider(frames["combat"], "TriggerFOV", States.combat, 1, 20)
+
+-- Visuals slider
+bindSlider(frames["visuals"], "RGBSpeed", States.visuals, 1, 3)
+
+-- Exploit slider
+bindSlider(frames["exploit"], "FOVValue", States.exploit, 70, 120)
+
+
+local Camera = workspace.CurrentCamera
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Mouse = Players.LocalPlayer:GetMouse()
+local Combat = States.combat
+
+
+
+local function GetClosestTarget()
+    local closest = nil
+    local shortestDist = Combat.AimFOV
+    local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = player.Character.HumanoidRootPart
+            local screenPos, visible = Camera:WorldToViewportPoint(hrp.Position)
+
+            if visible then
+                local dist = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+                if dist < shortestDist then
+                    if Combat.WallCheck then
+                        local ray = Ray.new(Camera.CFrame.Position, (hrp.Position - Camera.CFrame.Position).Unit * 500)
+                        local hit = workspace:FindPartOnRayWithIgnoreList(ray, {Camera, Players.LocalPlayer.Character})
+                        if hit and not hrp:IsAncestorOf(hit) then continue end
+                    end
+                    shortestDist = dist
+                    closest = player
+                end
+            end
+        end
+    end
+    return closest
+end
+
+
+local function ApplyAimbot()
+    if not Combat.Aimbot then return end
+    local target = GetClosestTarget()
+    if not target or not target.Character then return end
+    local head = target.Character:FindFirstChild("Head") or target.Character:FindFirstChild("HumanoidRootPart")
+    if not head then return end
+
+    local targetPos = Camera:WorldToViewportPoint(head.Position)
+    local aimPos = Vector2.new(targetPos.X, targetPos.Y)
+
+    if Combat.SilentAimbot then
+        -- Silent Aimbot: override bullet direction
+        shared.silentTarget = head.Position
+    else
+        -- Smooth Aimbot: move mouse gradually
+        local diff = (aimPos - Vector2.new(Mouse.X, Mouse.Y)) / Combat.AimSmooth
+        mousemoverel(diff.X, diff.Y)
+    end
+end
+
+
+
+local function TriggerBotLogic()
+    if not Combat.TriggerBot then return end
+    local target = GetClosestTarget()
+    if not target or not target.Character then return end
+    local hrp = target.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    local screenPos = Camera:WorldToViewportPoint(hrp.Position)
+    local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    local dist = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+
+    if dist <= Combat.TriggerFOV then
+        if Combat.TriggerBotWallCheck then
+            local ray = Ray.new(Camera.CFrame.Position, (hrp.Position - Camera.CFrame.Position).Unit * 500)
+            local hit = workspace:FindPartOnRayWithIgnoreList(ray, {Camera, Players.LocalPlayer.Character})
+            if hit and not hrp:IsAncestorOf(hit) then return end
+        end
+        mouse1click()
+    end
+end
+
+
+
+
+local function DrawFOV()
+    if not Combat.DrawFOVRadius then return end
+    local circle = Drawing.new("Circle")
+    circle.Position = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
+    circle.Radius = Combat.AimFOV
+    circle.Color = Color3.fromRGB(249, 89, 89)
+    circle.Thickness = 1.5
+    circle.Transparency = 0.6
+    circle.Filled = false
+    circle.Visible = true
+    task.delay(0.016, function()
+        circle:Remove()
+    end)
+end
+
+
+
+RunService.RenderStepped:Connect(function()
+    ApplyAimbot()
+    TriggerBotLogic()
+    DrawFOV()
+end)
+
+
+
+
+
+local VisualSettings = States.visuals
+
+local Camera = workspace.CurrentCamera
+local DrawingObjects = {}
+
+local function ClearDrawings()
+    for _, obj in ipairs(DrawingObjects) do
+        if obj then
+            obj:Remove()
+        end
+    end
+    DrawingObjects = {}
+end
+
+local function RenderESPFor(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
+
+    local hrp = player.Character.HumanoidRootPart
+    local pos, onScreen = Camera:WorldToViewportPoint(hrp.Position)
+
+    if not onScreen then return end
+
+    -- 📛 Nom du joueur
+    if VisualSettings.PlayerName then
+        local nameText = Drawing.new("Text")
+        nameText.Text = player.Name
+        nameText.Position = Vector2.new(pos.X, pos.Y - 40)
+        nameText.Size = 16
+        nameText.Color = Color3.fromRGB(255, 255, 255)
+        nameText.Center = true
+        nameText.Outline = true
+        nameText.Visible = true
+        table.insert(DrawingObjects, nameText)
+    end
+
+    -- 📍 Distance
+    if VisualSettings.Distance then
+        local distance = math.floor((Camera.CFrame.Position - hrp.Position).Magnitude)
+        local distText = Drawing.new("Text")
+        distText.Text = tostring(distance) .. "m"
+        distText.Position = Vector2.new(pos.X, pos.Y - 25)
+        distText.Size = 14
+        distText.Color = Color3.fromRGB(180, 180, 180)
+        distText.Center = true
+        distText.Outline = true
+        distText.Visible = true
+        table.insert(DrawingObjects, distText)
+    end
+
+    -- ❤️ Barre de vie
+    if VisualSettings.HealthBar and player.Character:FindFirstChild("Humanoid") then
+        local hp = player.Character.Humanoid.Health
+        local max = player.Character.Humanoid.MaxHealth
+        local ratio = math.clamp(hp / max, 0, 1)
+        local bar = Drawing.new("Line")
+        bar.From = Vector2.new(pos.X - 30, pos.Y)
+        bar.To = Vector2.new(pos.X - 30, pos.Y - 60 * ratio)
+        bar.Color = Color3.fromRGB(0, 255, 0)
+        bar.Thickness = 4
+        bar.Visible = true
+        table.insert(DrawingObjects, bar)
+    end
+
+    -- 📦 2D Box
+    if VisualSettings.Box2D then
+        local box = Drawing.new("Square")
+        box.Size = Vector2.new(50, 80)
+        box.Position = Vector2.new(pos.X - 25, pos.Y - 60)
+        box.Color = Color3.fromRGB(249, 89, 89)
+        box.Thickness = 2
+        box.Filled = false
+        box.Visible = true
+        table.insert(DrawingObjects, box)
+    end
+end
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    ClearDrawings()
+
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            if VisualSettings.Radar or VisualSettings.Box2D or VisualSettings.PlayerName or VisualSettings.Distance or VisualSettings.HealthBar then
+                RenderESPFor(player)
+            end
+            if VisualSettings.RainbowChams or VisualSettings.EnemyChams or VisualSettings.HandChams then
+                ApplyChamsTo(player)
+            end
+        end
+    end
+end)
+
+
+
+local HttpService = game:GetService("HttpService")
+local Config = States.config
+
+local configFolder = "DTR_VIP_Configs"
+if not isfolder(configFolder) then
+    makefolder(configFolder)
+end
+
+
+
+local function SaveCurrentConfig(name)
+    local data = {
+        combat = States.combat,
+        visuals = States.visuals,
+        exploit = States.exploit,
+    }
+    local encoded = HttpService:JSONEncode(data)
+    writefile(configFolder .. "/" .. name .. ".json", encoded)
+    Config.lastCreated = name
+end
+
+
+local function LoadConfig(name)
+    local path = configFolder .. "/" .. name .. ".json"
+    if isfile(path) then
+        local raw = readfile(path)
+        local decoded = HttpService:JSONDecode(raw)
+
+        -- Remplace l’état actuel
+        States.combat = decoded.combat or States.combat
+        States.visuals = decoded.visuals or States.visuals
+        States.exploit = decoded.exploit or States.exploit
+        Config.selectedConfig = name
+    end
+end
+
+
+
+local function DeleteConfig(name)
+    local path = configFolder .. "/" .. name .. ".json"
+    if isfile(path) then
+        delfile(path)
+        if Config.selectedConfig == name then
+            Config.selectedConfig = nil
+        end
+    end
+end
+
+
+local function AutoLoadLast()
+    if Config.lastCreated then
+        LoadConfig(Config.lastCreated)
+    end
+end
+AutoLoadLast()
+
+
+local function ListSavedConfigs()
+    local files = listfiles(configFolder)
+    local configs = {}
+
+    for _, file in ipairs(files) do
+        local name = file:match("([^/\\]+)%.json$")
+        if name then table.insert(configs, name) end
+    end
+
+    return configs
+end
+
+
+
+local Exploit = States.exploit
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = game.Players.LocalPlayer
+
+
+local function ApplyNightMode()
+    if Exploit.NightMode then
+        Lighting.Ambient = Color3.fromRGB(30, 30, 30)
+        Lighting.Brightness = 1
+        Lighting.ClockTime = 0
+    else
+        Lighting.Ambient = Color3.fromRGB(138, 138, 138)
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 14
+    end
+end
+
+
+local function ApplyBigPlayer()
+    if LocalPlayer.Character then
+        for _, part in ipairs(LocalPlayer.Character:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.Size = Exploit.BigPlayer and Vector3.new(4, 4, 4) or Vector3.new(2, 2, 1)
+            end
+        end
+    end
+end
+
+
+local function ApplyThirdPerson()
+    Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+    Camera.CameraType = Exploit.ThirdPerson and Enum.CameraType.Scriptable or Enum.CameraType.Custom
+    if Exploit.ThirdPerson then
+        Camera.CFrame = Camera.CFrame * CFrame.new(0, 0, 10)
+    end
+end
+
+
+local function ApplySpinBot()
+    if Exploit.SpinBot and LocalPlayer.Character then
+        local hrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(15), 0)
+        end
+    end
+end
+
+
+
+local function ApplyAspectRatio()
+    if Exploit.AspectRatio then
+        Camera.FieldOfView = 80 -- ou toute valeur stylisée
+    else
+        Camera.FieldOfView = 70 -- reset normal
+    end
+end
+
+
+local function ApplyFOVChanger()
+    if Exploit.FOVChanger then
+        Camera.FieldOfView = Exploit.FOVValue
+    end
+end
+
+
+local function ApplyFreeCam()
+    if Exploit.FreeCam and Camera.CameraType ~= Enum.CameraType.Scriptable then
+        Camera.CameraType = Enum.CameraType.Scriptable
+        Camera.CFrame = Camera.CFrame * CFrame.new(0, 0, -10)
+    elseif not Exploit.FreeCam then
+        Camera.CameraType = Enum.CameraType.Custom
+    end
+end
+
+
+
+RunService.RenderStepped:Connect(function()
+    ApplyNightMode()
+    ApplyBigPlayer()
+    ApplyThirdPerson()
+    ApplySpinBot()
+    ApplyAspectRatio()
+    ApplyFOVChanger()
+    ApplyFreeCam()
+end)
+
+
+
+
+local UIS = game:GetService("UserInputService")
+local dragging = false
+local dragStart, startPos
+
+FramePrincipale.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = FramePrincipale.Position
+    end
+end)
+
+FramePrincipale.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        FramePrincipale.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+
+
+
+UIS.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.Insert then
+        FramePrincipale.Visible = not FramePrincipale.Visible
+    end
+end)
